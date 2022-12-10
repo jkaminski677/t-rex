@@ -1,3 +1,6 @@
+body {
+  text-align: center;
+}
 .game {
   max-width: 600px;
   height: 200px;
@@ -182,7 +185,7 @@
   grid-row: 3 / 3;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   #mobile {
     display: flex;
   }
