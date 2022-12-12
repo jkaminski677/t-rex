@@ -1,6 +1,8 @@
 const dino = document.getElementById("dino");
 const cactus = document.getElementById("cactus");
 const bird = document.getElementById("bird");
+let scores = 0;
+let getIntoContact = 0;
 
 function jump() {
   dinoOryg();
@@ -40,6 +42,32 @@ function move(e) {
   chrId.style.left = chr.leftright() + "px";
 }
 
+function LeftClickMove() {
+  (chrId = document.getElementById("dino")),
+    (chr = {
+      leftright: function () {
+        var x = parseInt(getComputedStyle(chrId).left);
+        x -= 7;
+        return x;
+      },
+    });
+
+  chrId.style.left = chr.leftright() + "px";
+}
+
+function RightClickMove() {
+  (chrId = document.getElementById("dino")),
+    (chr = {
+      leftright: function () {
+        var x = parseInt(getComputedStyle(chrId).left);
+        x += 7;
+        return x;
+      },
+    });
+
+  chrId.style.left = chr.leftright() + "px";
+}
+
 let isAlive = setInterval(function () {
   let dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("top"));
   let dinoLeft = parseInt(
@@ -52,15 +80,27 @@ let isAlive = setInterval(function () {
     window.getComputedStyle(bird).getPropertyValue("left")
   );
 
-  if (cactusLeft < dinoLeft && cactusLeft > dinoLeft - 20 && dinoTop >= 140) {
-    alert("Game Over!");
+  if (cactusLeft < dinoLeft + 20 && cactusLeft > dinoLeft && dinoTop >= 140) {
+    dino.classList.remove("dinoClass");
+    dino.classList.add("collision");
+    delay(40).then(() => alert("Game Over!"));
     // console.log("colision");
+  } else {
+    ScorePoint(dinoLeft, cactusLeft, birdLeft);
   }
-  if (birdLeft < dinoLeft && birdLeft > dinoLeft - 20 && dinoTop <= 160) {
-    alert("Game Over!");
+  if (birdLeft < dinoLeft + 20 && birdLeft > dinoLeft && dinoTop <= 160) {
+    dino.classList.remove("dinoClass");
+    dino.classList.add("collision");
+    delay(40).then(() => alert("Game Over!"));
     // console.log("colision");
+  } else {
+    ScorePoint(dinoLeft, cactusLeft, birdLeft);
   }
 }, 10);
+
+function delay(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 // Bird Animation
 setInterval(function () {
@@ -76,6 +116,20 @@ setInterval(function () {
 setInterval(function () {
   bird.classList.add("birdFly");
 }, 4500);
+
+function ScorePoint(dinoLeft, cactusLeft, birdLeft) {
+  if (cactusLeft < dinoLeft + 20 && cactusLeft > dinoLeft) {
+    getIntoContact += 1;
+    if (getIntoContact === 1) {
+      scores++;
+      getIntoContact = 0;
+    }
+  }
+  if (birdLeft < dinoLeft + 20 && birdLeft > dinoLeft) {
+    scores += 1;
+    console.log(scores);
+  }
+}
 
 document.addEventListener("keydown", move);
 
