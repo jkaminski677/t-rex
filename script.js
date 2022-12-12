@@ -3,6 +3,12 @@ const cactus = document.getElementById("cactus");
 const bird = document.getElementById("bird");
 let scores = 0;
 let getIntoContact = 0;
+let amountOfLeft = 0;
+let amountOfRight = 0;
+let amountOfUp = 0;
+let Amount = 0;
+let allbuttonsToCode = 0;
+let birdTime = 4500;
 
 function jump() {
   dinoOryg();
@@ -11,6 +17,21 @@ function jump() {
 
     setTimeout(function () {
       dino.classList.remove("jump");
+      getIntoContact = 0;
+    }, 600);
+  }
+}
+
+function Upjump() {
+  amountOfUp++;
+  StarCoding(amountOfLeft, amountOfRight, amountOfUp);
+  dinoOryg();
+  if (dino.classList != "jump") {
+    dino.classList.add("jump");
+
+    setTimeout(function () {
+      dino.classList.remove("jump");
+      getIntoContact = 0;
     }, 600);
   }
 }
@@ -22,6 +43,7 @@ function down() {
 function dinoOryg() {
   dino.classList.remove("down");
   dino.classList.add("dinoClass");
+  getIntoContact = 0;
 }
 
 function move(e) {
@@ -43,6 +65,9 @@ function move(e) {
 }
 
 function LeftClickMove() {
+  amountOfLeft++;
+  StarCoding(amountOfLeft, amountOfRight, amountOfUp);
+  amountOfLeft++;
   (chrId = document.getElementById("dino")),
     (chr = {
       leftright: function () {
@@ -56,6 +81,9 @@ function LeftClickMove() {
 }
 
 function RightClickMove() {
+  amountOfRight++;
+  StarCoding(amountOfLeft, amountOfRight, amountOfUp);
+
   (chrId = document.getElementById("dino")),
     (chr = {
       leftright: function () {
@@ -80,18 +108,22 @@ let isAlive = setInterval(function () {
     window.getComputedStyle(bird).getPropertyValue("left")
   );
 
-  if (cactusLeft < dinoLeft + 20 && cactusLeft > dinoLeft && dinoTop >= 140) {
+  if (
+    cactusLeft < dinoLeft + 20 &&
+    cactusLeft > dinoLeft - 20 &&
+    dinoTop >= 140
+  ) {
     dino.classList.remove("dinoClass");
     dino.classList.add("collision");
-    delay(40).then(() => alert("Game Over!"));
+    // delay(40).then(() => alert("Game Over!"));
     // console.log("colision");
   } else {
     ScorePoint(dinoLeft, cactusLeft, birdLeft);
   }
-  if (birdLeft < dinoLeft + 20 && birdLeft > dinoLeft && dinoTop <= 160) {
+  if (birdLeft < dinoLeft + 20 && birdLeft > dinoLeft + 10 && dinoTop <= 160) {
     dino.classList.remove("dinoClass");
     dino.classList.add("collision");
-    delay(40).then(() => alert("Game Over!"));
+    // delay(40).then(() => alert("Game Over!"));
     // console.log("colision");
   } else {
     ScorePoint(dinoLeft, cactusLeft, birdLeft);
@@ -106,28 +138,45 @@ function delay(time) {
 setInterval(function () {
   birdCord = document.getElementById("bird");
   var x = parseInt(window.getComputedStyle(birdCord).getPropertyValue("left"));
-  //   console.log(x);
   if (x < 0) {
-    // console.log(x);
     bird.classList.remove("birdFly");
   }
 }, 10);
 
 setInterval(function () {
   bird.classList.add("birdFly");
-}, 4500);
+}, birdTime);
+
 
 function ScorePoint(dinoLeft, cactusLeft, birdLeft) {
-  if (cactusLeft < dinoLeft + 20 && cactusLeft > dinoLeft) {
-    getIntoContact += 1;
-    if (getIntoContact === 1) {
+  if (getIntoContact == 0) {
+    if (
+      (cactusLeft < dinoLeft && cactusLeft > dinoLeft - 40) ||
+      (birdLeft < dinoLeft && birdLeft > dinoLeft - 40)
+    ) {
       scores++;
-      getIntoContact = 0;
+      document.getElementById("score").innerHTML = "Score: " + scores;
+      getIntoContact = 1;
     }
   }
-  if (birdLeft < dinoLeft + 20 && birdLeft > dinoLeft) {
-    scores += 1;
-    console.log(scores);
+}
+
+function StarCoding(lef, rig, u) {
+  if (lef == 1) {
+    setInterval(function () {
+      Amount++;
+      // console.log(Amount);
+    }, 1000);
+  }
+  if (Amount > 0 && Amount < 10) {
+    if (lef / 2 == 3 && rig == 6 && u == 9) {
+      console.log("xd");
+      dino.classList.remove("dinoClass");
+      dino.classList.remove("down");
+      cactus.classList.remove("cactuses");
+      bird.classList.remove("birdFly");
+      document.getElementById("bird").remove();
+    }
   }
 }
 
